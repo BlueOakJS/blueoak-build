@@ -1,0 +1,26 @@
+var url = domain + path;
+var options = {
+    timeout: parameters.$timeout,
+    method: '{{method}}',
+    url: url,
+    params: queryParameters,
+    data: body,
+    headers: headers
+};
+if(Object.keys(form).length > 0) {
+   options.data = form;
+   options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+   options.transformRequest = {{&className}}.transformRequest;
+}
+$http(options)
+.success(function(data){
+    deferred.resolve(data);
+})
+.error(function(data, status, headers, config){
+    deferred.reject({
+        status: status,
+        headers: headers,
+        config: config,
+        body: data
+    });
+});
