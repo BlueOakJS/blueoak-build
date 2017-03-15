@@ -142,36 +142,16 @@ function compileApp(platform) {
 	args.push(device);
 
 	if (platform == 'ios') {
-		// Get the provisioning profile from the config.
-		var provisioningProfile = envConfig.appConfig.provisioningProfile;
-
-		// Allow the user to override it via CLI.
-		if (utils.getCommandLineOptions().profile)
-			provisioningProfile = utils.getCommandLineOptions().profile;
-
-		if (provisioningProfile) {
-			var UUID;
-
-			if (iosUtils.isUUID(provisioningProfile)) {
-				UUID = provisioningProfile;
-			} else {
-				var installedProvisioningProfiles = iosUtils.getInstalledProvisioningProfiles();
-				UUID = installedProvisioningProfiles.byName[provisioningProfile];
-				if (!UUID) {
-					console.log(chalk.red.bold('Provisioning profile ' + provisioningProfile + ' not found'));
-					console.log(chalk.cyan('Use \'gulp list-provisioning-profiles\' to show the installed provisioning profiles.'));
-					throw new Error('Provisioning profile ' + provisioningProfile + ' not found');
-				}
-				if (UUID.length != 1) {
-					console.log(chalk.red.bold('Provisioning profile ' + provisioningProfile + ' is not unique'));
-					console.log(chalk.cyan('Use \'gulp list-provisioning-profiles\' to show the installed provisioning profiles.'));
-					throw new Error('Provisioning profile ' + provisioningProfile + ' is not unique');
-				}
-				console.log(chalk.cyan('Using provisioning profile ' + UUID));
+		var buildOptions = {
+			ios: {
 			}
+		};
+		var buildSection = buildOptions.ios[utils.getBuildType()] = {};
 
-			args.push('--', '--provisioningProfile', UUID);
-		}
+		buildSection.codeSignIdentity = 'iPhone Developer';
+		buildSection.packageType = envConfig.appConfig.packageType;
+		buildSection.developmentTeam = envConfig.appConfig.developmentTeam;
+		fs.writeFileSync(path.join(generatorConfig.cordovaDirectory, 'build.json'), JSON.stringify(buildOptions));
 	}
 
 	console.log(chalk.cyan('Building app...'));

@@ -294,9 +294,10 @@ function buildMFPIOS() {
 			}
 			console.log(chalk.cyan('Using provisioning profile ' + UUID));
 		}
-
-		args.push('PROVISIONING_PROFILE=' + UUID);
 	}
+
+	args.push('CODE_SIGN_IDENTITY=' + 'iPhone Developer');
+	args.push('DEVELOPMENT_TEAM=' + envConfig.appConfig.developmentTeam);
 
 	return spawn('xcodebuild', args, {
 		printCommand: true,

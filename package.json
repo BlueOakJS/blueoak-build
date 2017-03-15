@@ -1,9 +1,12 @@
 {
 	"name": "@pointsource/blueoak-build",
-	"version": "0.1.18",
-	"description": "PointSource BlueOak client side build scripts",
-	"repository": "PointSource/generator-blueoak",
+	"version": "0.1.19",
+	"description": "BlueOak client side build scripts",
+	"repository": "BlueOakJS/blueoak-build",
 	"author": "PointSource LLC",
+	"contributors": [
+		"Andre Asselin <andre.asselin@pointsource.com>"
+	],
 	"copyright": "Copyright (c) 2015-2017 PointSource LLC. All rights reserved.",
 	"license": "MIT",
 	"engines": {
