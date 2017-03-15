@@ -1,5 +1,5 @@
 {
-	"name": "@pointsource/blueoak-build",
+	"name": "blueoak-build",
 	"version": "0.1.19",
 	"description": "BlueOak client side build scripts",
 	"repository": "BlueOakJS/blueoak-build",
