@@ -17,7 +17,6 @@ function createconfig(platformType) {
 
 	selectedConfig.appConfig.platformType = platformType;
 	var stream = $.ngConstant({
-			name: 'app.config',
 			templatePath: path.join(__dirname, '../../templates/app.config.ejs'),
 			constants: selectedConfig,
 			stream: true
