@@ -296,7 +296,9 @@ function buildMFPIOS() {
 		}
 	}
 
-	args.push('CODE_SIGN_IDENTITY=' + 'iPhone Developer');
+	var codeSignIdentity = envConfig.appConfig.codeSignIdentity ? envConfig.appConfig.codeSignIdentity : 'iPhone Developer';
+
+	args.push('CODE_SIGN_IDENTITY=' + codeSignIdentity);
 	args.push('DEVELOPMENT_TEAM=' + envConfig.appConfig.developmentTeam);
 
 	return spawn('xcodebuild', args, {
@@ -307,42 +309,14 @@ function buildMFPIOS() {
 		function() {
 			del.sync(path.join(generatorConfig.cordovaDirectory, '/platforms/ios/build', generatorConfig.cordovaProjectName + '-' + utils.getBuildType() + '.ipa'));
 
+			var exportOptionsPlistPath = process.cwd() + path.sep + envConfig.appConfig.exportOptionsPlist;
+
 			var args = [
-				'-exportArchive', '-exportFormat', 'IPA',
+				'-exportArchive', '-exportOptionsPlist', exportOptionsPlistPath,
 				'-archivePath', archivePath,
 				'-exportPath', path.join('build', generatorConfig.cordovaProjectName + '-' + utils.getBuildType() + '.ipa'),
 				'-configuration', buildType
 			];
-
-			if (provisioningProfile)
-                args.push('-exportProvisioningProfile', provisioningProfile);
-
-			return spawn('xcodebuild', args, {
-				printCommand: true,
-				stdio: 'inherit',
-				cwd: path.join(generatorConfig.cordovaDirectory, '/platforms/ios')
-			});
-		}
-	).then(
-		function() {
-			try {
-				fs.mkdirSync(path.join(generatorConfig.cordovaDirectory, '/platforms/ios/build/device'));
-			} catch (err) {
-				if (err.code != 'EEXIST')
-					throw err;
-			}
-
-			del.sync(path.join(generatorConfig.cordovaDirectory, '/platforms/ios/build/device', generatorConfig.cordovaProjectName + '.app'));
-
-			var args = [
-				'-exportArchive', '-exportFormat', 'APP',
-				'-archivePath', archivePath,
-				'-exportPath', path.join('build/device/', generatorConfig.cordovaProjectName + '.app'),
-				'-configuration', buildType
-			];
-
-			if (provisioningProfile)
-                args.push('-exportProvisioningProfile', provisioningProfile);
 
 			return spawn('xcodebuild', args, {
 				printCommand: true,
