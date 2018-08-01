@@ -300,8 +300,6 @@ function buildMFPIOS() {
 
 	args.push('CODE_SIGN_IDENTITY=' + codeSignIdentity);
 	args.push('DEVELOPMENT_TEAM=' + envConfig.appConfig.developmentTeam);
-	
-	var exportOptionsPlistPath = process.cwd() + path.sep + envConfig.appConfig.exportOptionsPlist;
 
 	return spawn('xcodebuild', args, {
 		printCommand: true,
@@ -310,6 +308,8 @@ function buildMFPIOS() {
 	}).then(
 		function() {
 			del.sync(path.join(generatorConfig.cordovaDirectory, '/platforms/ios/build', generatorConfig.cordovaProjectName + '-' + utils.getBuildType() + '.ipa'));
+
+			var exportOptionsPlistPath = process.cwd() + path.sep + envConfig.appConfig.exportOptionsPlist;
 
 			var args = [
 				'-exportArchive', '-exportOptionsPlist', exportOptionsPlistPath,
